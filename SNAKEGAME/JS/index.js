@@ -22,6 +22,8 @@ function main(ctime) {
     gameEngine();
 }
 
+// Function that help to find collide the boundary of the board and snake it self
+
 function isCollide(snakeArray) {
     for (let i = 1; i < snakeArray.length; i++) {
         if (snakeArray[i].x === snakeArray[0].x && snakeArray[i].y === snakeArray[0].y) {
@@ -35,6 +37,7 @@ function isCollide(snakeArray) {
 }
 
 function gameEngine() {
+
 
     if (isCollide(snakeArray)) {
         gameOverSound.play();
@@ -52,12 +55,16 @@ function gameEngine() {
     if (snakeArray[0].x === food.x && snakeArray[0].y === food.y) {
         foodSound.play();
         score += 1;
+        // HighScore Updation 
         if (score > highScoreValue) {
             highScoreValue = score;
             localStorage.setItem("highScore", JSON.stringify(highScoreValue));
             highScoreBox.innerHTML = "High Score:" + highScoreValue;
         }
         scoreBox.innerHTML = "Score: " + score;
+
+        //Display snake and food
+
         snakeArray.unshift({ x: snakeArray[0].x + inputDirection.x, y: snakeArray[0].y + inputDirection.y });
         let a = 2;
         let b = 16;
@@ -72,6 +79,9 @@ function gameEngine() {
     //updating snake moves and food
 
     board.innerHTML = "";
+
+     //Snake length updation 
+
     snakeArray.forEach((e, index) => {
         snakeElement = document.createElement('div');
         snakeElement.style.gridRowStart = e.y;
@@ -91,12 +101,11 @@ function gameEngine() {
     board.appendChild(foodElement);
 
 
-    //Display snake and food
+    
 }
 
 
-
-//Game starts from here
+// local Storage functinality to store high score
 let highScoreValue = localStorage.getItem("highScore")
 if (highScoreValue === null) {
     highScoreValue = 0;
@@ -106,7 +115,13 @@ else {
     highScoreValue = JSON.parse(highScoreValue)
     highScoreBox.innerHTML = "High Score:" + highScoreValue;
 }
+
+//Game starts from here
+
 window.requestAnimationFrame(main)
+
+// Moves from keys like up, down, left , right Arrows
+
 window.addEventListener('keydown', e => {
     inputDirection = { x: 0, y: 1 }
     moveSound.play();
